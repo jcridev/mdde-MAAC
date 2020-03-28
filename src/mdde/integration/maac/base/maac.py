@@ -28,7 +28,7 @@ def make_parallel_env(reg_host, reg_port, env_config, scenario):
 
 
 def run(config, mdde_config, scenario):
-    model_dir = Path(config.model_dir) / config.env_id / config.model_name
+    model_dir = Path(config.model_dir) / config.model_name
     if not model_dir.exists():
         run_num = 1
     else:
@@ -65,9 +65,9 @@ def run(config, mdde_config, scenario):
                                  [acsp.shape[0] if isinstance(acsp, Box) else acsp.n
                                   for acsp in env.action_space])
     t = 0
-    for ep_i in range(0, config.n_episodes, config.n_rollout_threads):
+    for ep_i in range(0, config.n_episodes, 1):
         print("Episodes %i-%i of %i" % (ep_i + 1,
-                                        ep_i + 1 + config.n_rollout_threads,
+                                        ep_i + 1 + 1,
                                         config.n_episodes))
         obs = env.reset()
         model.prep_rollouts(device='cpu')
@@ -82,13 +82,13 @@ def run(config, mdde_config, scenario):
             # convert actions to numpy arrays
             agent_actions = [ac.data.numpy() for ac in torch_agent_actions]
             # rearrange actions to be per environment
-            actions = [[ac[i] for ac in agent_actions] for i in range(config.n_rollout_threads)]
+            actions = [[ac[i] for ac in agent_actions] for i in range(1)]
             next_obs, rewards, dones, infos = env.step(actions)
             replay_buffer.push(obs, agent_actions, rewards, next_obs, dones)
             obs = next_obs
-            t += config.n_rollout_threads
+            t += 1
             if (len(replay_buffer) >= config.batch_size and
-                    (t % config.steps_per_update) < config.n_rollout_threads):
+                    (t % config.steps_per_update) < 1):
                 if config.use_gpu:
                     model.prep_training(device='gpu')
                 else:
@@ -101,11 +101,11 @@ def run(config, mdde_config, scenario):
                     model.update_all_targets()
                 model.prep_rollouts(device='cpu')
         ep_rews = replay_buffer.get_average_rewards(
-            config.episode_length * config.n_rollout_threads)
+            config.episode_length * 1)
         for a_i, a_ep_rew in enumerate(ep_rews):
             logger.add_scalar('agent%i/mean_episode_rewards' % a_i, a_ep_rew, ep_i)
 
-        if ep_i % config.save_interval < config.n_rollout_threads:
+        if ep_i % config.save_interval < 1:
             model.prep_rollouts(device='cpu')
             os.makedirs(run_dir / 'incremental', exist_ok=True)
             model.save(run_dir / 'incremental' / ('model_ep%i.pt' % (ep_i + 1)))

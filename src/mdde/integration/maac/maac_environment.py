@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, List, Union
+from typing import Dict, Tuple, List
 
 import numpy as np
 from gym.spaces import Box, Discrete
@@ -49,8 +49,8 @@ class MAACMultiAgentEnv:
         for k in sorted(obs):
             obs_n.append(obs[k].astype(np.float32).flatten())
             reward_list.append(reward[k])
-            done_list[k] = False  # TODO: real dictionary of the terminal states
-            info_list[k] = {}
+            done_list.append(False)  # TODO: real dictionary of the terminal states
+            info_list.append({})
 
         return obs_n, reward_list, done_list, info_list
 
@@ -86,3 +86,9 @@ class MAACMultiAgentEnv:
         :return: Agents declared in the environment
         """
         return self._env.agents
+
+    def close(self) -> None:
+        """
+        A stub for disposing the environment.
+        """
+        pass

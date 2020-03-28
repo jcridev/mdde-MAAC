@@ -2,7 +2,11 @@
 [Multi-agent Data Distribution Environment](https://github.com/akharitonov/mdde) wrapper for [Actor-Attention-Critic for Multi-Agent Reinforcement Learning (Iqbal and Sha, ICML 2019)](https://github.com/shariqiqbal2810/MAAC)
 
 
-We're relying on the 
+We're relying on the original implementation of MAAC provided by Iqbal and Sha, we reuse as much of its code as possible. We do not introduce a lot of changes into the original code with only two exceptions:
+
+   1. MDDE does not support concurrent environments, so the option of creating mulptiple copies of the environment was removed (*n_rollout_threads*).
+   2. Allow MAAC critic to operate even in the scenarios where there is only one agent of a specific type. For more details, take a look at commit [8fa72056bc7602ac07706879c6e615d343eb1793](https://github.com/akharitonov/MAAC/commit/8fa72056bc7602ac07706879c6e615d343eb1793) in our fork of the original MAAC implementation.
+
 ## Installation
 
 Steps to roll out a development version of MAAC for MDDE
@@ -37,3 +41,5 @@ You will need to install **MDDE Core** and **TCP extension**.
     3. `git checkout 98257ef8c9bd23a24a330731ae54ed086d9ce4a7`
     4. `pip install --progress-bar off -e .`
     5. `cd ..`
+
+After you're done with the installation, take a look at the example code in the `./samples` directory.
