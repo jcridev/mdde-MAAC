@@ -1,6 +1,8 @@
-from typing import Dict, Tuple, List
+from typing import Dict, Tuple, List, Union
 
 import numpy as np
+from gym.spaces import Box, Discrete
+from mdde.agent.abc import ABCAgent
 
 from mdde.core import Environment
 
@@ -51,3 +53,36 @@ class MAACMultiAgentEnv:
             info_list[k] = {}
 
         return obs_n, reward_list, done_list, info_list
+
+    @property
+    def observation_space(self) -> List[Box]:
+        """
+        Environment observation space shape
+        :return: Dictionary containing the shape of the observation space per agent
+        """
+        obs_n = list()
+        env_obs_space = self._env.observation_space
+        for k in sorted(env_obs_space):
+            v_float = env_obs_space[k].astype(np.float32).flatten()
+            obs_n.append(Box(low=0.0, high=1.0, shape=v_float.shape))
+        return obs_n
+
+    @property
+    def action_space(self) -> List[Discrete]:
+        """
+        Environment action space shape
+        :return: Dictionary containing the shape of the action space per agent
+        """
+        act_n: List[Discrete] = list()
+        env_act_space = self._env.action_space
+        for k in sorted(env_act_space):
+            act_n.append(Discrete(env_act_space[k]))
+        return act_n
+
+    @property
+    def agents(self) -> Tuple[ABCAgent]:
+        """
+        Agents
+        :return: Agents declared in the environment
+        """
+        return self._env.agents

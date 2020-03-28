@@ -1,17 +1,20 @@
 import torch
 import torch.nn.functional as F
 from torch.optim import Adam
-from utils.misc import soft_update, hard_update, enable_gradients, disable_gradients
-from utils.agents import AttentionAgent
-from utils.critics import AttentionCritic
+from .utils.misc import soft_update, hard_update, enable_gradients, disable_gradients
+from .utils.agents import AttentionAgent
+from .utils.critics import AttentionCritic
+from .. import MAACMultiAgentEnv
 
 MSELoss = torch.nn.MSELoss()
+
 
 class AttentionSAC(object):
     """
     Wrapper class for SAC agents with central attention critic in multi-agent
     task
     """
+
     def __init__(self, agent_init_params, sa_size,
                  gamma=0.95, tau=0.01, pi_lr=0.01, q_lr=0.01,
                  reward_scale=10.,
@@ -39,7 +42,7 @@ class AttentionSAC(object):
         self.agents = [AttentionAgent(lr=pi_lr,
                                       hidden_dim=pol_hidden_dim,
                                       **params)
-                         for params in agent_init_params]
+                       for params in agent_init_params]
         self.critic = AttentionCritic(sa_size, hidden_dim=critic_hidden_dim,
                                       attend_heads=attend_heads)
         self.target_critic = AttentionCritic(sa_size, hidden_dim=critic_hidden_dim,
@@ -166,7 +169,6 @@ class AttentionSAC(object):
                 logger.add_scalar('agent%i/grad_norms/pi' % a_i,
                                   grad_norm, self.niter)
 
-
     def update_all_targets(self):
         """
         Update all target networks (called after normal updates have been
@@ -227,10 +229,15 @@ class AttentionSAC(object):
         torch.save(save_dict, filename)
 
     @classmethod
-    def init_from_env(cls, env, gamma=0.95, tau=0.01,
-                      pi_lr=0.01, q_lr=0.01,
+    def init_from_env(cls, env: MAACMultiAgentEnv,
+                      gamma=0.95,
+                      tau=0.01,
+                      pi_lr=0.01,
+                      q_lr=0.01,
                       reward_scale=10.,
-                      pol_hidden_dim=128, critic_hidden_dim=128, attend_heads=4,
+                      pol_hidden_dim=128,
+                      critic_hidden_dim=128,
+                      attend_heads=4,
                       **kwargs):
         """
         Instantiate instance of this class from multi-agent environment

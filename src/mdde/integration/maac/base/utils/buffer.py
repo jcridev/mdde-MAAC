@@ -2,10 +2,12 @@ import numpy as np
 from torch import Tensor
 from torch.autograd import Variable
 
+
 class ReplayBuffer(object):
     """
     Replay Buffer for multi-agent RL with parallel rollouts
     """
+
     def __init__(self, max_steps, num_agents, obs_dims, ac_dims):
         """
         Inputs:
@@ -29,7 +31,6 @@ class ReplayBuffer(object):
             self.next_obs_buffs.append(np.zeros((max_steps, odim), dtype=np.float32))
             self.done_buffs.append(np.zeros(max_steps, dtype=np.uint8))
 
-
         self.filled_i = 0  # index of first empty location in buffer (last index when full)
         self.curr_i = 0  # current index to write to (ovewrite oldest data)
 
@@ -39,7 +40,7 @@ class ReplayBuffer(object):
     def push(self, observations, actions, rewards, next_observations, dones):
         nentries = observations.shape[0]  # handle multiple parallel environments
         if self.curr_i + nentries > self.max_steps:
-            rollover = self.max_steps - self.curr_i # num of indices to roll over
+            rollover = self.max_steps - self.curr_i  # num of indices to roll over
             for agent_i in range(self.num_agents):
                 self.obs_buffs[agent_i] = np.roll(self.obs_buffs[agent_i],
                                                   rollover, axis=0)

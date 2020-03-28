@@ -4,10 +4,12 @@ from torch.optim import Adam
 from .misc import hard_update, gumbel_softmax, onehot_from_logits
 from .policies import DiscretePolicy
 
+
 class AttentionAgent(object):
     """
     General class for Attention agents (policy, target policy)
     """
+
     def __init__(self, num_in_pol, num_out_pol, hidden_dim=64,
                  lr=0.01, onehot_dim=0):
         """

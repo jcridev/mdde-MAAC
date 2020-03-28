@@ -38,6 +38,8 @@ class MaacSampleDefault():
         # Create scenario
         scenario = DefaultScenario(100, 5, agents)
 
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # MDDE Specific

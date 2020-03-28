@@ -8,25 +8,26 @@ from tensorboardX import SummaryWriter
 from .utils.make_env import make_env_tcp
 from .utils.buffer import ReplayBuffer
 from .utils.env_wrappers import DummyVecEnv
-from .algorithms.attention_sac import AttentionSAC
+from .attention_sac import AttentionSAC
+
+from .. import MAACMultiAgentEnv
 
 
-def make_parallel_env(env_id, n_rollout_threads, seed):
+def make_parallel_env(reg_host, reg_port, env_config, scenario):
     def get_env_fn(rank):
-        def init_env():
-            env = make_env_tcp(env_id, discrete_action=True)
-            np.random.seed(seed + rank * 1000)
+        def init_env() -> MAACMultiAgentEnv:
+            env = make_env_tcp(host=reg_host,
+                               port=reg_port,
+                               env_config=env_config,
+                               scenario=scenario)
             return env
 
         return init_env
 
-    if n_rollout_threads == 1:
-        return DummyVecEnv([get_env_fn(0)])
-    else:
-        raise NotImplementedError('MDDE currently doesn\'t support multiple environment instances')
+    return DummyVecEnv([get_env_fn(0)])
 
 
-def run(config):
+def run(config, mdde_config, scenario):
     model_dir = Path(config.model_dir) / config.env_id / config.model_name
     if not model_dir.exists():
         run_num = 1
@@ -46,7 +47,10 @@ def run(config):
 
     torch.manual_seed(run_num)
     np.random.seed(run_num)
-    env = make_parallel_env(config.env_id, config.n_rollout_threads, run_num)
+    env = make_parallel_env(config.registry_host,
+                            config.registry_port,
+                            mdde_config,
+                            scenario)
     model = AttentionSAC.init_from_env(env,
                                        tau=config.tau,
                                        pi_lr=config.pi_lr,

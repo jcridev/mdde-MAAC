@@ -3,10 +3,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 from .misc import onehot_from_logits, categorical_sample
 
+
 class BasePolicy(nn.Module):
     """
     Base policy network
     """
+
     def __init__(self, input_dim, out_dim, hidden_dim=64, nonlin=F.leaky_relu,
                  norm_in=True, onehot_dim=0):
         """
@@ -51,6 +53,7 @@ class DiscretePolicy(BasePolicy):
     """
     Policy Network for discrete action spaces
     """
+
     def __init__(self, *args, **kwargs):
         super(DiscretePolicy, self).__init__(*args, **kwargs)
 
@@ -73,7 +76,7 @@ class DiscretePolicy(BasePolicy):
             # return log probability of selected action
             rets.append(log_probs.gather(1, int_act))
         if regularize:
-            rets.append([(out**2).mean()])
+            rets.append([(out ** 2).mean()])
         if return_entropy:
             rets.append(-(log_probs * probs).sum(1).mean())
         if len(rets) == 1:
