@@ -35,10 +35,9 @@ class MAACMultiAgentEnv:
         :return:
         """
         agents = self._env.agents
-        env_actions: List[np.ndarray] = action_list[0]  # MDDE does not support parallel environments
         discrete_actions = {}
         for a in agents:
-            a_act = env_actions[a.id]
+            a_act = action_list[a.id]
             a_idx = np.argmax(a_act)
             discrete_actions[a.id] = a_idx
         obs, reward = self._env.step(discrete_actions)
