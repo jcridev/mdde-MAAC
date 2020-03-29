@@ -2,10 +2,12 @@
 [Multi-agent Data Distribution Environment](https://github.com/akharitonov/mdde) wrapper for [Actor-Attention-Critic for Multi-Agent Reinforcement Learning (Iqbal and Sha, ICML 2019)](https://github.com/shariqiqbal2810/MAAC)
 
 
-We're relying on the original implementation of MAAC provided by Iqbal and Sha, we reuse as much of its code as possible. We do not introduce a lot of changes into the original code with only two exceptions:
+We're relying on the original implementation of MAAC provided by [Iqbal and Sha](https://github.com/shariqiqbal2810/MAAC), we reuse as much of its code as possible. We do not introduce a lot of changes into the original code with only two exceptions:
 
    1. MDDE does not support concurrent environments, so the option of creating multiple copies of the environment was removed (*n_rollout_threads*).
-   2. Fixed critic attention heads logging for tensorboard in the scenarios where there is a group of agents consisting of only a single agent.
+   2. Fixed critic attention heads logging for tensorboard in the scenarios where there is a group of agents consisting of only a single agent. Please refer to the following commits of our [MAAC fork](https://github.com/akharitonov/MAAC) for more details:
+      * [8fa72056bc7602ac07706879c6e615d343eb1793](https://github.com/akharitonov/MAAC/commit/8fa72056bc7602ac07706879c6e615d343eb1793)
+      * [7edfce33255316f66d74ca9c02da070aaec6c0cb](https://github.com/akharitonov/MAAC/commit/7edfce33255316f66d74ca9c02da070aaec6c0cb)
 
 ## Installation
 
