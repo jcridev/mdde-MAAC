@@ -4,8 +4,8 @@
 
 We're relying on the original implementation of MAAC provided by Iqbal and Sha, we reuse as much of its code as possible. We do not introduce a lot of changes into the original code with only two exceptions:
 
-   1. MDDE does not support concurrent environments, so the option of creating mulptiple copies of the environment was removed (*n_rollout_threads*).
-   2. Allow MAAC critic to operate even in the scenarios where there is only one agent of a specific type. For more details, take a look at commit [8fa72056bc7602ac07706879c6e615d343eb1793](https://github.com/akharitonov/MAAC/commit/8fa72056bc7602ac07706879c6e615d343eb1793) in our fork of the original MAAC implementation.
+   1. MDDE does not support concurrent environments, so the option of creating multiple copies of the environment was removed (*n_rollout_threads*).
+   2. Fixed critic attention heads logging for tensorboard in the scenarios where there is a group of agents consisting of only a single agent.
 
 ## Installation
 
