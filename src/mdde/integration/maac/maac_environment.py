@@ -40,7 +40,7 @@ class MAACMultiAgentEnv:
             a_act = action_list[a.id]
             a_idx = np.argmax(a_act)
             discrete_actions[a.id] = a_idx
-        obs, reward = self._env.step(discrete_actions)
+        obs, reward, done = self._env.step(discrete_actions)
         obs_n = list()
         reward_list = list()
         done_list = list()
@@ -48,7 +48,7 @@ class MAACMultiAgentEnv:
         for k in sorted(obs):
             obs_n.append(obs[k].astype(np.float32).flatten())
             reward_list.append(reward[k])
-            done_list.append(False)  # TODO: real dictionary of the terminal states
+            done_list.append(done[k])
             info_list.append({})
 
         return obs_n, reward_list, done_list, info_list
