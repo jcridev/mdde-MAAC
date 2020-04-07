@@ -22,9 +22,9 @@ setup(
     license='MIT Licence',
     packages=find_namespace_packages(include=['mdde.integration.maac.*'], exclude=['mdde.test.*']),
 
-    installs_requires=['gym==0.9.4',
-                       'tensorboardx==1.9',
-                       'tensorboard==2.0.0',
-                       'seaborn==0.9.0'],
+    install_requires=['gym==0.9.4',
+                      'tensorboardx==1.9',
+                      'tensorboard==2.0.0',
+                      'seaborn==0.9.0'],
     zip_safe=False,
 )
