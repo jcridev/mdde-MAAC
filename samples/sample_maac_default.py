@@ -20,8 +20,8 @@ class MaacSampleDefault():
         Constructor
         :param args_config: Configuration MDDE and MAAC
             Required fields MDDE:
-                config.registry_host: TCP host of MDDE registry control API
-                config.registry_port: TCP port of MDDE registry control API
+                config.reg_host: TCP host of MDDE registry control API
+                config.reg_port: TCP port of MDDE registry control API
                 config.registry_config: path to the MDDE registry yaml config containing Data nodes
                 config.mdde_temp: path to the folder where MDDE can store temporary files if needed
             Required fields MAAC (unchanged from the original publication):
@@ -51,7 +51,7 @@ class MaacSampleDefault():
     def run(self):
         registry_config = os.path.realpath(self._config.registry_config)
         """Path to MDDE Registry configuration file"""
-        mdde_temp_dir = os.path.realpath(self._config.mdde_temp)
+        mdde_temp_dir = os.path.realpath(self._config.env_temp_dir)
         """Path to a folder where MDDE should store its temporary files"""
 
         os.makedirs(os.path.abspath(mdde_temp_dir), exist_ok=True)
@@ -76,22 +76,22 @@ class MaacSampleDefault():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # MDDE Specific
-    parser.add_argument("--registry-host",
-                        help="MDDE Registry host",
+    parser.add_argument('--reg-host',
+                        help='MDDE registry host or IP',
                         type=str,
-                        default="localhost")
-    parser.add_argument("--registry-port",
-                        help="MDDE Registry port",
+                        default='localhost')
+    parser.add_argument('--reg-port',
+                        help='MDDE registry control TCP port',
                         type=int,
                         default=8942)
 
     # next two parameters default values assume MDDE was checked out into the root of this repo
-    parser.add_argument("--registry-config",
-                        help="MDDE Registry configuration YAML",
+    parser.add_argument('-c', '--config',
+                        help='Path to the MDDE registry configuration YAML',
                         type=str,
                         default="../mdde/debug/registry_config.yml")
-    parser.add_argument("--mdde-temp",
-                        help="MDDE Temporary files folder.",
+    parser.add_argument("--env-temp-dir",
+                        help="Directory for temporary files created by the scenario or agents.",
                         type=str,
                         default="../mdde/debug/agents")
 
@@ -120,7 +120,8 @@ if __name__ == '__main__':
     parser.add_argument("--tau", default=0.001, type=float)
     parser.add_argument("--gamma", default=0.99, type=float)
     parser.add_argument("--reward-scale", default=50000., type=float)
-    parser.add_argument("--use-gpu", action='store_true')
+    parser.add_argument("--use-gpu", action='store_true',
+                        help="Set this flag for MAAC to utilize GPU if available.")
 
     args_parsed = parser.parse_args()
 

@@ -1,5 +1,7 @@
 /baselines/
-/mdde/
+/mdde/debug
+/mdde-git/*
+!/mdde-git/README.md
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

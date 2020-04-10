@@ -1,0 +1,4 @@
+/baselines/
+/mdde/debug/
+/mdde-git/*
+!/mdde-git/README.md

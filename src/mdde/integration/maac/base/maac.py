@@ -47,9 +47,9 @@ def run(config, mdde_config, scenario):
 
     torch.manual_seed(run_num)
     np.random.seed(run_num)
-    env = make_parallel_env(config.registry_host,
-                            config.registry_port,
-                            mdde_config,
+    env = make_parallel_env(config.reg_host,
+                            config.reg_port,
+                            config,
                             scenario)
     model = AttentionSAC.init_from_env(env,
                                        tau=config.tau,

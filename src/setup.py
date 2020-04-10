@@ -20,7 +20,7 @@ setup(
     author_email='andrey.kharitonov@ovgu.de',
 
     license='MIT Licence',
-    packages=find_namespace_packages(include=['mdde.integration.maac.*'], exclude=['mdde.test.*']),
+    packages=find_namespace_packages(include=['mdde.integration.*'], exclude=['mdde.test.*']),
 
     install_requires=['gym==0.9.4',
                       'tensorboardx==1.9',
