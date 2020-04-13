@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  maddpg:
+  # MAAC Environment (build an appropriate image in ../../images/)
+    image: mdde/env:maac-latest
+    container_name: mdde_maac
+    depends_on:
+      - registry
+    networks:
+      back:
+        aliases:
+          - maac
+    volumes:
+      - mdde_shared:/mdde/shared
+    environment:
+      - REG_HOST=registry
+      - REG_PORT=8942
