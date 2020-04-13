@@ -53,9 +53,9 @@ else
 fi
 # Core MDDE and registry connection protocol
 pip install --progress-bar off -e ./mdde/core
-pip install --progress-bar off -e ./mdde/mdde-registry-client-tcp
+pip install --progress-bar off -e ./mdde/extensions/mdde-registry-client-tcp
 # Install MDDE-MAAC extension
 cd $MDDE_MAAC_LOCATION
-pip install --progress-bar off -e ./src
+pip install --progress-bar off -e .
 
 conda deactivate

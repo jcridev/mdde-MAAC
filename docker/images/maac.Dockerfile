@@ -51,20 +51,22 @@ ENV MDDE_CORE_SRC $MDDE_SRC/mdde-core
 
 WORKDIR $MDDE_SRC
 # MAAC Extension for MDDE
-COPY ./src ./integration-maac
+ENV MDDE_MAAC_SRC $MDDE_SRC/integration-maac
+RUN mkdir p $MDDE_MAAC_SRC
+COPY ./src $MDDE_MAAC_SRC
 # Entrypoint code
 COPY ./samples/sample_maac_default.py ./run.py
 
 # Script creating the conda environment suitable for the used version of MAAC
 COPY ./support/scripts/create_conda_env.sh ./create_conda_env.sh
 # Entrypoint script
-COPY ./support/scripts-ray/execute_in_conda_env.sh ./execute_in_conda_env.sh
+COPY ./support/scripts/execute_in_conda_env.sh ./execute_in_conda_env.sh
 RUN chmod +x ./create_conda_env.sh
 RUN chmod +x ./execute_in_conda_env.sh
 
 # Create environment
 COPY $MDDE_CORE_LOCATION $MDDE_CORE_SRC
-RUN bash ./create_conda_env.sh $MDDE_CORE_LOCATION $MDDE_CORE_SRC "cpu"
+RUN bash ./create_conda_env.sh $MDDE_CORE_LOCATION $MDDE_CORE_SRC $MDDE_MAAC_SRC "cpu"
 
 # Make sure conda has execution permissions
 RUN find ${CONDA_PATH} -type d -exec chmod +x {} \;
@@ -76,7 +78,7 @@ VOLUME $MDDE_RESULTS
 
 # A volume for shared files, such as MDDE config.yml
 ENV MDDE_SHARED /mdde/shared
-RUN mkdir -p $MDDE_SHARE
+RUN mkdir -p $MDDE_SHARED
 
 # Run experiments
 ENTRYPOINT $MDDE_SRC/execute_in_conda_env.sh $MDDE_SRC/run.py $MDDE_RESULTS $REG_HOST $REG_PORT $MDDE_SHARED/config.yml

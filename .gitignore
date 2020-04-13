@@ -1,5 +1,5 @@
 /baselines/
-/mdde/debug
+/mdde/
 /mdde-git/*
 !/mdde-git/README.md
 
