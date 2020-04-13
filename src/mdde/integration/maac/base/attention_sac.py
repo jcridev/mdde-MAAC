@@ -229,7 +229,8 @@ class AttentionSAC(object):
         torch.save(save_dict, filename)
 
     @classmethod
-    def init_from_env(cls, env: MAACMultiAgentEnv,
+    def init_from_env(cls,
+                      env,
                       gamma=0.95,
                       tau=0.01,
                       pi_lr=0.01,

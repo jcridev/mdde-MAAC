@@ -104,7 +104,7 @@ if __name__ == '__main__':
                         help="Path to the base models store")
     parser.add_argument("--buffer-length", default=int(1e6), type=int)
     parser.add_argument("--n-episodes", default=1000, type=int)
-    parser.add_argument("--episode-length", default=25, type=int)
+    parser.add_argument("--episode-length", default=200, type=int)
     parser.add_argument("--steps-per-update", default=100, type=int)
     parser.add_argument("--num-updates", default=4, type=int,
                         help="Number of updates per update cycle")

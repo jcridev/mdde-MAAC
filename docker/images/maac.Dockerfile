@@ -3,6 +3,8 @@ FROM ubuntu:18.04
 # Where MDDE core source should be obtained from. './mdde-git' means it will be retrieved from the GitHub repository at build time.
 # You can't also provide a directory within the build context if you have MDDE core sources locally.
 ARG MDDE_CORE_LOCATION=./mdde-git
+# "cpu" or "gpu"
+ARG PLATFORM=cpu
 
 SHELL ["/bin/bash", "-c"]
 
@@ -66,7 +68,7 @@ RUN chmod +x ./execute_in_conda_env.sh
 
 # Create environment
 COPY $MDDE_CORE_LOCATION $MDDE_CORE_SRC
-RUN bash ./create_conda_env.sh $MDDE_CORE_LOCATION $MDDE_CORE_SRC $MDDE_MAAC_SRC "cpu"
+RUN bash ./create_conda_env.sh $MDDE_CORE_LOCATION $MDDE_CORE_SRC $MDDE_MAAC_SRC $PLATFORM
 
 # Make sure conda has execution permissions
 RUN find ${CONDA_PATH} -type d -exec chmod +x {} \;
