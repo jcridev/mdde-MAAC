@@ -1,5 +1,12 @@
 FROM ubuntu:18.04
 
+LABEL org.label-schema.name="mdde/env:maac"
+LABEL org.label-schema.description="MDDE MAAC based agents"
+LABEL org.label-schema.vcs-url="https://github.com/akharitonov/mdde-MAAC/"
+LABEL org.label-schema.version="0.5"
+LABEL org.label-schema.schema-version="1.0"
+LABEL maintainer="https://github.com/akharitonov/"
+
 # Where MDDE core source should be obtained from. './mdde-git' means it will be retrieved from the GitHub repository at build time.
 # You can't also provide a directory within the build context if you have MDDE core sources locally.
 ARG MDDE_CORE_LOCATION=./mdde-git
