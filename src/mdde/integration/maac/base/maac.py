@@ -13,13 +13,15 @@ from .attention_sac import AttentionSAC
 from .. import MAACMultiAgentEnv
 
 
-def make_parallel_env(reg_host, reg_port, env_config, scenario):
+def make_parallel_env(reg_host, reg_port, env_config, scenario, write_stats=True, observation_shaper=None):
     def get_env_fn(rank):
         def init_env() -> MAACMultiAgentEnv:
             env = make_env_tcp(host=reg_host,
                                port=reg_port,
                                env_config=env_config,
-                               scenario=scenario)
+                               scenario=scenario,
+                               write_stats=write_stats,
+                               observation_shaper=observation_shaper)
             return env
 
         return init_env
@@ -27,7 +29,7 @@ def make_parallel_env(reg_host, reg_port, env_config, scenario):
     return DummyVecEnv([get_env_fn(0)])
 
 
-def run(config, mdde_config, scenario):
+def run(config, mdde_config, scenario, write_stats=True, observation_shaper=None):
     model_dir = Path(config.model_dir) / config.model_name
     if not model_dir.exists():
         run_num = 1
@@ -47,10 +49,12 @@ def run(config, mdde_config, scenario):
 
     torch.manual_seed(run_num)
     np.random.seed(run_num)
-    env = make_parallel_env(config.reg_host,
-                            config.reg_port,
-                            mdde_config,
-                            scenario)
+    env = make_parallel_env(reg_host=config.reg_host,
+                            reg_port=config.reg_port,
+                            env_config=mdde_config,
+                            scenario=scenario,
+                            write_stats=write_stats,
+                            observation_shaper=observation_shaper)
     model = AttentionSAC.init_from_env(env,
                                        tau=config.tau,
                                        pi_lr=config.pi_lr,

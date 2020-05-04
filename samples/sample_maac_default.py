@@ -87,7 +87,27 @@ class MaacSampleDefault():
                                    agents=agents,
                                    benchmark_clients=5)  # Number of YCSB threads
 
-        maac_run(self._config, mdde_config, scenario)
+        def obs_shaper_2d_box(obs):
+            """Reshapes the environment into a form suitable for 2D box. Example 1.
+            Note: Guaranteed to work only with the Default agent - Default scenario combination."""
+            # Resulted shape (Example for default scenario and default single-node agent: 2 agents, 5 fragments):
+            # a_1: [0-4(allocation) 5-9(popularity) 10-14(ownership binary flag)]
+            # a_2: [0-4(allocation) 5-9(popularity) 10-14(ownership binary flag)]
+            # Hint: 2D array where rows are agents, and attributes in columns are as shown above.
+            return obs.reshape((obs.shape[0], obs.shape[1] * obs.shape[2]), order='F')
+
+        def obs_shaper_flat_box(obs):
+            """Reshapes the environment into a form suitable for 2D 'flat' box. Example 2.
+            Note: Guaranteed to work only with the Default agent - Default scenario combination."""
+            # Resulted shape (Example for default scenario and default single-node agent: 2 agents, 5 fragments):
+            # [0-4(a_1: allocation) 5-9(a_1: popularity) 10-14(a_1: ownership binary flag)
+            #  15-19(a_2: allocation) 20-24(a_2: popularity) 25-29(a_2: ownership binary flag)]
+            return obs.reshape((obs.shape[0], obs.shape[1] * obs.shape[2]), order='F')\
+                      .reshape((obs.shape[0] * obs.shape[1] * obs.shape[2]), order='C')
+
+        maac_run(config=self._config, mdde_config=mdde_config, scenario=scenario,
+                 write_stats=True,
+                 observation_shaper=obs_shaper_flat_box)
 
 
 if __name__ == '__main__':
