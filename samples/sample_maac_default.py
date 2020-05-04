@@ -1,8 +1,9 @@
 import os
 import argparse
+from pathlib import Path
 
 from mdde.core import Environment
-from mdde.agent.default import DefaultAgent
+from mdde.agent.default import SingleNodeDefaultAgent
 from mdde.config import ConfigEnvironment, ConfigRegistry
 from mdde.scenario.default import DefaultScenario
 
@@ -49,13 +50,22 @@ class MaacSampleDefault():
         """Configuration object containing properties required for both MDDE and MAAC"""
 
     def run(self):
-        registry_config = os.path.realpath(self._config.registry_config)
-        """Path to MDDE Registry configuration file"""
+        # Config
+        registry_config = os.path.realpath(self._config.config)
+        """Path to MDDE Registry configuration file."""
+        # Temp dir
         mdde_temp_dir = os.path.realpath(self._config.env_temp_dir)
-        """Path to a folder where MDDE should store its temporary files"""
-
+        """Path to a folder where MDDE should store its temporary files."""
         os.makedirs(os.path.abspath(mdde_temp_dir), exist_ok=True)
-        mdde_config = ConfigEnvironment(mdde_temp_dir)
+        # Result paths
+        result_dir_path_root = Path(self._config.result_dir).resolve()
+        result_dir_path_mdde_obj = result_dir_path_root.joinpath("mdde")
+        result_dir_path_mdde_obj.mkdir(parents=True, exist_ok=True)
+        result_dir_path_mdde = str(result_dir_path_mdde_obj)
+        """Path to the folder where MDDE would output the result."""
+
+        mdde_config = ConfigEnvironment(tmp_dir=mdde_temp_dir,
+                                        result_dir=result_dir_path_mdde)
 
         # Registry configuration
         config_container = ConfigRegistry()
@@ -64,11 +74,18 @@ class MaacSampleDefault():
         agents = list()
         idx = 0
         for node in config_container.get_nodes():
-            agents.append(DefaultAgent(node.id, idx, node.id))
+            agents.append(SingleNodeDefaultAgent(agent_name=node.id,
+                                                 agent_id=idx,
+                                                 data_node_id=node.id,
+                                                 write_stats=True,
+                                                 allow_do_nothing=True))
             idx += 1
 
         # Create scenario
-        scenario = DefaultScenario(100, 5, agents)
+        scenario = DefaultScenario(num_fragments=20,
+                                   num_steps_before_bench=25,
+                                   agents=agents,
+                                   benchmark_clients=5)  # Number of YCSB threads
 
         maac_run(self._config, mdde_config, scenario)
 
@@ -90,10 +107,14 @@ if __name__ == '__main__':
                         help='Path to the MDDE registry configuration YAML',
                         type=str,
                         default="../mdde/debug/registry_config.yml")
-    parser.add_argument("--env-temp-dir",
+    parser.add_argument('-t', '--env-temp-dir',
                         help="Directory for temporary files created by the scenario or agents.",
                         type=str,
-                        default="../mdde/debug/agents")
+                        default="../mdde/debug/temp")
+    parser.add_argument('-r', '--result-dir',
+                        help="Results directory.",
+                        type=str,
+                        default="../mdde/debug/result")
 
     # MAAC Specific
     parser.add_argument("--model-name",

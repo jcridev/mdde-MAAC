@@ -18,12 +18,16 @@ Steps to roll out a development version of MAAC for MDDE
 Create a new Conda environment and activate it
 
 1. `conda create -y --name mdde-maac python=3.7`
-2. `conda activate maac`
+2. `conda activate mdde-maac`
 
 Then checkout [MDDE](https://github.com/akharitonov/mdde), go to the folder where you checked it out and follow the installation instructions in `./mdde`.
 You will need to install **MDDE Core** and **TCP extension**.
 
 1. `git clone https://github.com/akharitonov/mdde.git "mdde"`
+    1. `cd ./mdde/mdde`
+    2. `pip install -e ./core`
+    3. `pip install -e ./extensions/mdde-registry-client-tcp`
+    4. `cd ../..`
 
 ### MAAC dependencies
 

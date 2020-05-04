@@ -49,7 +49,7 @@ def run(config, mdde_config, scenario):
     np.random.seed(run_num)
     env = make_parallel_env(config.reg_host,
                             config.reg_port,
-                            config,
+                            mdde_config,
                             scenario)
     model = AttentionSAC.init_from_env(env,
                                        tau=config.tau,
