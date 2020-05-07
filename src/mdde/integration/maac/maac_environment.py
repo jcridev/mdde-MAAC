@@ -33,7 +33,7 @@ class MAACMultiAgentEnv:
         Reset the environment and return new observations for each agent
         :return: Observations: dictionary containing observations for each array
         """
-        obs = self._env.reset()
+        obs, act_l = self._env.reset()
         obs_n = list()
         for k in sorted(obs):
             obs_n.append(self._shape_obs(obs[k]))
@@ -54,7 +54,7 @@ class MAACMultiAgentEnv:
             a_act = action_list[a.id]
             a_idx = np.argmax(a_act)
             discrete_actions[a.id] = a_idx
-        obs, reward, done = self._env.step(discrete_actions)
+        obs, reward, done, act_l = self._env.step(discrete_actions)
         obs_n = list()
         reward_list = list()
         done_list = list()
@@ -74,7 +74,7 @@ class MAACMultiAgentEnv:
         :return: Dictionary containing the shape of the observation space per agent
         """
         obs_n = list()
-        env_obs_space = self._env.observation_space
+        env_obs_space, act_l = self._env.observation_space
         for k in sorted(env_obs_space):
             obs_n.append(self._box_obs(env_obs_space[k]))
         return obs_n
