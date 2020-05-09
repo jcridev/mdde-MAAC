@@ -82,7 +82,7 @@ RUN find ${CONDA_PATH} -type d -exec chmod +x {} \;
 
 # A volume for shared files, such as MDDE config.yml
 ENV MDDE_RESULTS /mdde/results
-RUN mkdir -p $MDDE_RESULTS
+RUN mkdir -p $MDDE_RESULTS/model
 VOLUME $MDDE_RESULTS
 
 # A volume for shared files, such as MDDE config.yml
@@ -90,4 +90,4 @@ ENV MDDE_SHARED /mdde/shared
 RUN mkdir -p $MDDE_SHARED
 
 # Run experiments
-ENTRYPOINT $MDDE_SRC/execute_in_conda_env.sh $MDDE_SRC/run.py $MDDE_RESULTS $REG_HOST $REG_PORT $MDDE_SHARED/config.yml
+ENTRYPOINT $MDDE_SRC/execute_in_conda_env.sh $MDDE_SRC/run.py $MDDE_RESULTS/model $REG_HOST $REG_PORT $MDDE_SHARED/config.yml $MDDE_RESULTS

@@ -17,7 +17,7 @@ do
         # Registry is reachable
         echo "MDDE Registry is up at: $3:$4"
         conda activate mdde
-        python $1 --model-dir $2 --reg-host "$3" --reg-port $4 --env-temp-dir /agents_temp --config "$5"
+        python $1 --model-dir $2 --reg-host "$3" --reg-port $4 --env-temp-dir /agents_temp --config "$5" --result-dir $6
         exit 0
     fi
     sleep 3
