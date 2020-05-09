@@ -1,3 +1,9 @@
+# ==============================
+# Authors:
+# Multi-Actor-Attention-Critic codebase by Iqbal and Sha, ICML 2019
+# This file is a fork from: https://github.com/shariqiqbal2810/MAAC
+# ==============================
+
 import numpy as np
 from torch import Tensor
 from torch.autograd import Variable

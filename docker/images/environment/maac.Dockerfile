@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-LABEL org.label-schema.name="mdde/env:maac"
+LABEL org.label-schema.name="mdde/env/maac"
 LABEL org.label-schema.description="MDDE MAAC based agents"
 LABEL org.label-schema.vcs-url="https://github.com/akharitonov/mdde-MAAC/"
 LABEL org.label-schema.version="0.5"
