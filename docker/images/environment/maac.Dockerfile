@@ -90,4 +90,4 @@ ENV MDDE_SHARED /mdde/shared
 RUN mkdir -p $MDDE_SHARED
 
 # Run experiments
-ENTRYPOINT $MDDE_SRC/execute_in_conda_env.sh $MDDE_SRC/run.py $MDDE_RESULTS/model $REG_HOST $REG_PORT $MDDE_SHARED/config.yml $MDDE_RESULTS
+ENTRYPOINT $MDDE_SRC/execute_in_conda_env.sh $MDDE_SRC/run.py $MDDE_RESULTS/model $REG_HOST $REG_PORT $MDDE_SHARED/config.yml $MDDE_RESULTS $LAUNCH_ARGS

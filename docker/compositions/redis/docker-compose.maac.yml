@@ -11,6 +11,12 @@ services:
           - maac
     volumes:
       - mdde_shared:/mdde/shared
+      - mdde_results:/mdde/results
     environment:
       - REG_HOST=registry
       - REG_PORT=8942
+#      - LAUNCH_ARGS=--no-do-nothing
+    env_file:
+      - ./args.env
+volumes:
+  mdde_results: # MDDE results

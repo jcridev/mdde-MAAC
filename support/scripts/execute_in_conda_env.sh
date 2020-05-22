@@ -5,6 +5,14 @@ source ~/miniconda/etc/profile.d/conda.sh
 # For debug
 echo "Expected location of MDDE registry: $3:$4"
 echo "Expected location of the registry config: $5"
+echo "Expected location of MDDE results: $6"
+echo "Expected location of MAAC model: $2"
+
+ALL_ARGS=( "$@" )
+ALL_ARGS_LEN=${#ALL_ARGS[@]}
+ADDITINAL_ARGS=${ALL_ARGS[@]:6:$ALL_ARGS_LEN}
+echo "Additional args: ${ADDITINAL_ARGS}"
+
 
 # Wait for registry to be up and ready before running the script
 # Reference: https://docs.docker.com/compose/startup-order/
@@ -17,7 +25,7 @@ do
         # Registry is reachable
         echo "MDDE Registry is up at: $3:$4"
         conda activate mdde
-        python $1 --model-dir $2 --reg-host "$3" --reg-port $4 --env-temp-dir /agents_temp --config "$5" --result-dir $6
+        python $1 --model-dir $2 --reg-host "$3" --reg-port $4 --env-temp-dir /agents_temp --config "$5" --result-dir "$6" $ADDITINAL_ARGS
         exit 0
     fi
     sleep 3

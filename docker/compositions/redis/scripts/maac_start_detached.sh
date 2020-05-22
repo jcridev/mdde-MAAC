@@ -8,4 +8,4 @@ REPO_ROOT=${2:-../../../..}
 MDDE_DIR=${3:-${REPO_ROOT}/mdde}
 
 # Bring up full setup with default MAAC
-docker-compose -f ${MDDE_DIR}/docker/compositions/redis/docker-compose.yml -f ../docker-compose.maac.yml -p $PROJ up -d
+(cd .. && docker-compose -f ${MDDE_DIR}/docker/compositions/redis/docker-compose.yml -f docker-compose.maac.yml -p $PROJ up -d)

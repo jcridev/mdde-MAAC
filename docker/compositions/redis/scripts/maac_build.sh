@@ -37,4 +37,4 @@ if [ $SKIPREGISTRY -eq 0 ];then
   (cd ${MDDE_DIR}/docker/images/registry/scripts/ && sh build_redis_images.sh)
 fi
 # 3. Build the final composition, including MDDE Registry image (From MDDE Registry base image) relying on Redis DB for own storgate and data nodes
-docker-compose -f ${MDDE_DIR}/docker/compositions/redis/docker-compose.yml -f ../docker-compose.maac.yml build --no-cache
+(cd .. && docker-compose -f ${MDDE_DIR}/docker/compositions/redis/docker-compose.yml -f docker-compose.maac.yml build --no-cache)

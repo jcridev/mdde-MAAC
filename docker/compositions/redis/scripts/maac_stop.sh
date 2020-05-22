@@ -9,4 +9,4 @@ REPO_ROOT=${2:-../../../..}
 # MDDE core location
 MDDE_DIR=${3:-${REPO_ROOT}/mdde}
 
-docker-compose -f ${MDDE_DIR}/docker/compositions/redis/docker-compose.yml -f ../docker-compose.maac.yml -p $PROJ down
+(cd .. && docker-compose -f ${MDDE_DIR}/docker/compositions/redis/docker-compose.yml -f docker-compose.maac.yml -p $PROJ stop)

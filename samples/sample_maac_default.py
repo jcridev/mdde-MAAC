@@ -78,7 +78,7 @@ class MaacSampleDefault():
                                                  agent_id=idx,
                                                  data_node_id=node.id,
                                                  write_stats=True,
-                                                 allow_do_nothing=True))
+                                                 allow_do_nothing=self._config.do_nothing))
             idx += 1
 
         # Create scenario
@@ -145,7 +145,7 @@ if __name__ == '__main__':
                         help="Path to the base models store")
     parser.add_argument("--buffer-length", default=int(1e6), type=int)
     parser.add_argument("--n-episodes", default=1000, type=int)
-    parser.add_argument("--episode-length", default=1000, type=int)
+    parser.add_argument("--episode-length", default=1001, type=int)
     parser.add_argument("--steps-per-update", default=100, type=int)
     parser.add_argument("--num-updates", default=4, type=int,
                         help="Number of updates per update cycle")
@@ -163,6 +163,18 @@ if __name__ == '__main__':
     parser.add_argument("--reward-scale", default=50000., type=float)
     parser.add_argument("--use-gpu", action='store_true',
                         help="Set this flag for MAAC to utilize GPU if available.")
+
+    # - MDDE scenario
+    # -- Do-nothing action
+    parser.add_argument('--do-nothing',
+                        dest='do_nothing',
+                        action='store_true',
+                        help='(Default) Enable the "do nothing" action for agents.')
+    parser.add_argument('--no-do-nothing',
+                        dest='do_nothing',
+                        action='store_false',
+                        help='Disable the "do nothing" action for agents.')
+    parser.set_defaults(do_nothing=True)
 
     args_parsed = parser.parse_args()
 
