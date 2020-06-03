@@ -5,7 +5,7 @@ from pathlib import Path
 from mdde.core import Environment
 from mdde.agent.default import SingleNodeDefaultAgent
 from mdde.config import ConfigEnvironment, ConfigRegistry
-from mdde.scenario.default import DefaultScenario
+from mdde.scenario.default import DefaultScenario, DefaultScenarioSimulation
 
 from mdde.integration.maac.base import run as maac_run
 
@@ -82,10 +82,23 @@ class MaacSampleDefault():
             idx += 1
 
         # Create scenario
-        scenario = DefaultScenario(num_fragments=20,
-                                   num_steps_before_bench=25,
-                                   agents=agents,
-                                   benchmark_clients=5)  # Number of YCSB threads
+        num_fragments: int = 20
+        write_stats: bool = True
+        if self._config.sim:
+            scenario = DefaultScenarioSimulation(num_fragments=num_fragments,
+                                                 num_steps_before_bench=self._config.bench_psteps,
+                                                 agents=agents,
+                                                 benchmark_clients=self._config.bench_clients,
+                                                 write_stats=write_stats)  # Number of YCSB threads
+        else:
+            scenario = DefaultScenario(num_fragments=num_fragments,
+                                       num_steps_before_bench=self._config.bench_psteps,
+                                       agents=agents,
+                                       benchmark_clients=self._config.bench_clients,
+                                       write_stats=write_stats)  # Number of YCSB threads
+
+        # Set multiplier to the sore related term of the default reward function
+        scenario.set_storage_importance(self._config.store_m)
 
         def obs_shaper_2d_box(obs):
             """Reshapes the environment into a form suitable for 2D box. Example 1.
@@ -160,7 +173,7 @@ if __name__ == '__main__':
     parser.add_argument("--q-lr", default=0.001, type=float)
     parser.add_argument("--tau", default=0.001, type=float)
     parser.add_argument("--gamma", default=0.99, type=float)
-    parser.add_argument("--reward-scale", default=50000., type=float)
+    parser.add_argument("--reward-scale", default=10000., type=float)
     parser.add_argument("--use-gpu", action='store_true',
                         help="Set this flag for MAAC to utilize GPU if available.")
 
@@ -175,6 +188,22 @@ if __name__ == '__main__':
                         action='store_false',
                         help='Disable the "do nothing" action for agents.')
     parser.set_defaults(do_nothing=True)
+
+    parser.add_argument('--bench-psteps',
+                        help='Frequency of benchmark execution (execute every N steps).',
+                        type=int,
+                        default=25)
+
+    parser.add_argument('--store-m',
+                        help='Importance multiplier for the storage term of the default reward function.'
+                             '0.0 - ignore (agents are allowed to hoard everything with no repercussions)',
+                        type=float,
+                        default=0.5)
+
+    parser.add_argument('--bench-clients',
+                        help='Number of benchmark clients.',
+                        type=int,
+                        default=50)
 
     args_parsed = parser.parse_args()
 
