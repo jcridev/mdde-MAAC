@@ -14,10 +14,18 @@ mkdir -p ${WORK_DIR}/res_maac/maac_dn
 mkdir -p ${WORK_DIR}/res_maac/maac_wdn
 (cd ${COMPOSE_DIR}/scripts/ && sh maac_retrieve_results.sh ${PFX}maac_wdn ${WORK_DIR}/res_maac/maac_wdn)
 
+# With do-nothing, disregard storage, bench at every step
+mkdir -p ${WORK_DIR}/res_maac/maac_dn_sm0_b1
+(cd ${COMPOSE_DIR}/scripts/ && sh maac_retrieve_results.sh ${PFX}maac_dn_sm0_b1 ${WORK_DIR}/res_maac/maac_dn_sm0_b1)
+
+# Without do-nothing, disregard storage, bench at every step
+mkdir -p ${WORK_DIR}/res_maac/maac_wdn_sm0_b1
+(cd ${COMPOSE_DIR}/scripts/ && sh maac_retrieve_results.sh ${PFX}maac_wdn_sm0_b1 ${WORK_DIR}/res_maac/maac_wdn_sm0_b1)
+
 # With do-nothing
-mkdir -p ${WORK_DIR}/res_maac/maac_dn_g05
-(cd ${COMPOSE_DIR}/scripts/ && sh maac_retrieve_results.sh ${PFX}maac_dn_g05 ${WORK_DIR}/res_maac/maac_dn_g05)
+#mkdir -p ${WORK_DIR}/res_maac/maac_dn_g05
+#(cd ${COMPOSE_DIR}/scripts/ && sh maac_retrieve_results.sh ${PFX}maac_dn_g05 ${WORK_DIR}/res_maac/maac_dn_g05)
 
 # Without do-nothing
-mkdir -p ${WORK_DIR}/res_maac/maac_wdn_g05
-(cd ${COMPOSE_DIR}/scripts/ && sh maac_retrieve_results.sh ${PFX}maac_wdn_g05 ${WORK_DIR}/res_maac/maac_wdn_g05)
+#mkdir -p ${WORK_DIR}/res_maac/maac_wdn_g05
+#(cd ${COMPOSE_DIR}/scripts/ && sh maac_retrieve_results.sh ${PFX}maac_wdn_g05 ${WORK_DIR}/res_maac/maac_wdn_g05)

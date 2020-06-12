@@ -5,6 +5,7 @@ from pathlib import Path
 from mdde.core import Environment
 from mdde.agent.default import SingleNodeDefaultAgent
 from mdde.config import ConfigEnvironment, ConfigRegistry
+from mdde.registry.workload import EDefaultYCSBWorkload
 from mdde.scenario.default import DefaultScenario, DefaultScenarioSimulation
 
 from mdde.integration.maac.base import run as maac_run
@@ -50,6 +51,11 @@ class MaacSampleDefault():
         """Configuration object containing properties required for both MDDE and MAAC"""
 
     def run(self):
+        # Workload
+        selected_workload: EDefaultYCSBWorkload = EDefaultYCSBWorkload.READ_10000_100000_LATEST_LARGE
+        if self._config.light:
+            selected_workload: EDefaultYCSBWorkload = EDefaultYCSBWorkload.READ_10000_100000_LATEST
+
         # Config
         registry_config = os.path.realpath(self._config.config)
         """Path to MDDE Registry configuration file."""
@@ -89,12 +95,16 @@ class MaacSampleDefault():
                                                  num_steps_before_bench=self._config.bench_psteps,
                                                  agents=agents,
                                                  benchmark_clients=self._config.bench_clients,
+                                                 data_gen_workload=selected_workload,
+                                                 bench_workload=selected_workload,
                                                  write_stats=write_stats)  # Number of YCSB threads
         else:
             scenario = DefaultScenario(num_fragments=num_fragments,
                                        num_steps_before_bench=self._config.bench_psteps,
                                        agents=agents,
                                        benchmark_clients=self._config.bench_clients,
+                                       data_gen_workload=selected_workload,
+                                       bench_workload=selected_workload,
                                        write_stats=write_stats)  # Number of YCSB threads
 
         # Set multiplier to the sore related term of the default reward function
@@ -166,8 +176,8 @@ if __name__ == '__main__':
                         default=1024, type=int,
                         help="Batch size for training")
     parser.add_argument("--save-interval", default=1000, type=int)
-    parser.add_argument("--pol-hidden-dim", default=128, type=int)
-    parser.add_argument("--critic-hidden-dim", default=128, type=int)
+    parser.add_argument("--pol-hidden-dim", default=240, type=int)
+    parser.add_argument("--critic-hidden-dim", default=240, type=int)
     parser.add_argument("--attend-heads", default=4, type=int)
     parser.add_argument("--pi-lr", default=0.001, type=float)
     parser.add_argument("--q-lr", default=0.001, type=float)
@@ -204,6 +214,14 @@ if __name__ == '__main__':
                         help='Number of benchmark clients.',
                         type=int,
                         default=50)
+
+    parser.add_argument('--sim',
+                        help='Simulated benchmark (except the first run).',
+                        action='store_true')
+
+    parser.add_argument('--light',
+                        help='Execute corresponding "light" workload.',
+                        action='store_true')
 
     args_parsed = parser.parse_args()
 
