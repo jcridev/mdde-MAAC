@@ -88,7 +88,7 @@ class MaacSampleDefault():
             idx += 1
 
         # Create scenario
-        num_fragments: int = 20
+        num_fragments: int = self._config.num_frags
         write_stats: bool = True
         if self._config.sim:
             scenario = DefaultScenarioSimulation(num_fragments=num_fragments,
@@ -109,6 +109,8 @@ class MaacSampleDefault():
 
         # Set multiplier to the sore related term of the default reward function
         scenario.set_storage_importance(self._config.store_m)
+        # Set ho much do-nothing worth
+        scenario.set_do_nothing_worth(self._config.dn_worth)
 
         def obs_shaper_2d_box(obs):
             """Reshapes the environment into a form suitable for 2D box. Example 1.
@@ -209,6 +211,16 @@ if __name__ == '__main__':
                              '0.0 - ignore (agents are allowed to hoard everything with no repercussions)',
                         type=float,
                         default=0.5)
+
+    parser.add_argument('--dn-worth',
+                        help='How much reward should be given to the agent that decide to do nothing in the iteration.',
+                        type=float,
+                        default=1.0)
+
+    parser.add_argument('--n-frags',
+                        help='Number of fragments to generate.',
+                        type=int,
+                        default=20)
 
     parser.add_argument('--bench-clients',
                         help='Number of benchmark clients.',
