@@ -22,6 +22,20 @@ COMPOSE_DIR=../docker/compositions/redis
 # Without do-nothing, disregard storage, bench at every step
 (cd ${COMPOSE_DIR}/scripts && sh maac_stop.sh ${PFX}maac_wdn_sm0_b1)
 
+
+# With do-nothing, disregard storage, bench at every step, 1e7 replay buffer
+(cd ${COMPOSE_DIR}/scripts && sh maac_stop.sh ${PFX}maac_dn_sm0_b1_10mrb)
+
+# Without do-nothing, disregard storage, bench at every step, 1e7 replay buffer
+(cd ${COMPOSE_DIR}/scripts && sh maac_stop.sh ${PFX}maac_wdn_sm0_b1_10mrb)
+
+# With do-nothing, consider storage, 80 fragments, bench at every step
+(cd ${COMPOSE_DIR}/scripts && sh maac_stop.sh ${PFX}maac_dn_b1_f80)
+
+# Without do-nothing, consider storage, 80 fragments, bench at every step
+(cd ${COMPOSE_DIR}/scripts && sh maac_stop.sh ${PFX}maac_wdn_b1_f80)
+
+
 # With do-nothing
 #(cd ${COMPOSE_DIR}/scripts && sh maac_stop.sh ${PFX}maac_dn_g05)
 
