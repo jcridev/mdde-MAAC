@@ -3,13 +3,6 @@
 # Prfix for container names
 PFX=${1:-""}
 
-# *.env file used by docker-compose
-ARGS_FILE=args.env
-COMPOSE_DIR=../docker/compositions/redis
-
-# Build required images 
-(cd ${COMPOSE_DIR}/scripts && sh maac_build.sh)
-
 # With do-nothing
 (cd ${COMPOSE_DIR}/scripts && sh maac_stop.sh ${PFX}maac_dn)
 
@@ -21,7 +14,6 @@ COMPOSE_DIR=../docker/compositions/redis
 
 # Without do-nothing, disregard storage, bench at every step
 (cd ${COMPOSE_DIR}/scripts && sh maac_stop.sh ${PFX}maac_wdn_sm0_b1)
-
 
 # With do-nothing, disregard storage, bench at every step, 1e7 replay buffer
 (cd ${COMPOSE_DIR}/scripts && sh maac_stop.sh ${PFX}maac_dn_sm0_b1_10mrb)
