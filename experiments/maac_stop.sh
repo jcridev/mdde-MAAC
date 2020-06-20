@@ -3,6 +3,10 @@
 # Prfix for container names
 PFX=${1:-""}
 
+# *.env file used by docker-compose
+ARGS_FILE=args.env
+COMPOSE_DIR=../docker/compositions/redis
+
 # With do-nothing
 (cd ${COMPOSE_DIR}/scripts && sh maac_stop.sh ${PFX}maac_dn)
 
