@@ -88,7 +88,7 @@ class MaacSampleDefault():
             idx += 1
 
         # Create scenario
-        num_fragments: int = self._config.num_frags
+        num_fragments: int = self._config.n_frags
         write_stats: bool = True
         if self._config.sim:
             scenario = DefaultScenarioSimulation(num_fragments=num_fragments,
