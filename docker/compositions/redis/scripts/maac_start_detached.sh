@@ -3,7 +3,7 @@
 # Project name as defined when compose was launched
 PROJ=${1:-mdde_maac}
 # MDDE-MAAC repo root
-REPO_ROOT=${2:-../../../..}
+REPO_ROOT=${2:-../../..}
 # MDDE core location
 MDDE_DIR=${3:-${REPO_ROOT}/mdde}
 
