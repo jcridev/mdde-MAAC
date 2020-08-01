@@ -12,7 +12,7 @@ if CURRENT_PYTHON < REQUIRED_PYTHON:
 
 setup(
     name='mdde.integration.maac',
-    version='0.1',
+    version='0.7',
     description='Multi-agent Data Distribution Environment: Actor-Attention-Critic for Multi-Agent Reinforcement '
                 'Learning',
 
